@@ -11,5 +11,10 @@
             "name": "yuehongbo",
             "email": "yuehongbo@zhemai.com"
         }
-    ]
+    ],
+    "autoload": {
+	"psr-4":{
+		"Apitool\\":"src"	
+	}
+	}
 }
