@@ -1,0 +1,15 @@
+{
+    "name": "yhb598712/apitool",
+    "description": "hehe",
+    "type": "library",
+    "require": {
+        "monolog/monolog": "^1.22"
+    },
+    "license": "mit",
+    "authors": [
+        {
+            "name": "yuehongbo",
+            "email": "yuehongbo@zhemai.com"
+        }
+    ]
+}
