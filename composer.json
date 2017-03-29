@@ -1,0 +1,18 @@
+{
+    "name": "yhb598712/apitool",
+    "description": "a test composer pro for yuehongbo",
+    "type": "project",
+    "authors": [
+        {
+            "name": "yuehongbo",
+            "email": "yhb598712@163.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "apitool\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
