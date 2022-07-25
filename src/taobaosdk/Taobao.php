@@ -6,6 +6,7 @@ class Taobao
 {
     public static function test()
     {
-        echo __FILE__;
+	    echo __FILE__;
+	    echo time();
     }
 }
