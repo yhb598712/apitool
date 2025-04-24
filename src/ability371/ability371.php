@@ -5,6 +5,7 @@ use Topsdk\Topapi\TopApiClient;
 use Topsdk\Topapi\Ability371\Request\TaobaoTbkCouponGetRequest;
 use Topsdk\Topapi\Ability371\Request\TaobaoTbkItemInfoGetRequest;
 use Topsdk\Topapi\Ability371\Request\TaobaoTbkItemInfoTemporaryGetRequest;
+use Topsdk\Topapi\Ability371\Request\TaobaoTbkItemInfoUpgradeGetRequest;
 
 class Ability371 {
 
@@ -32,5 +33,11 @@ class Ability371 {
     **/
     public function taobaoTbkItemInfoTemporaryGet(TaobaoTbkItemInfoTemporaryGetRequest $request) {
         return $this->client->execute("taobao.tbk.item.info.temporary.get", $request->toMap(), $request->toFileParamMap());
+    }
+    /**
+        淘宝客-公用-淘宝客商品详情查询升级版（简易版）
+    **/
+    public function taobaoTbkItemInfoUpgradeGet(TaobaoTbkItemInfoUpgradeGetRequest $request) {
+        return $this->client->execute("taobao.tbk.item.info.upgrade.get", $request->toMap(), $request->toFileParamMap());
     }
 }

@@ -4,7 +4,18 @@ namespace Yhb\taobaosdk;
 
 use Topsdk\Topapi\Ability370\Ability370;
 use Topsdk\Topapi\Ability370\Request\TaobaoTbkShopGetRequest;
+use Topsdk\Topapi\Ability371\Ability371;
+use Topsdk\Topapi\Ability371\Request\TaobaoTbkItemInfoGetRequest;
+use Topsdk\Topapi\Ability371\Request\TaobaoTbkItemInfoUpgradeGetRequest;
+use Topsdk\Topapi\Ability374\Ability374;
+use Topsdk\Topapi\Ability374\Request\TaobaoTbkActivityInfoGetRequest;
+use Topsdk\Topapi\Defaultability\Defaultability;
+use Topsdk\Topapi\Defaultability\Domain\TaobaoTbkDgMaterialOptionalUpgradeUcrowdrankitems;
+use Topsdk\Topapi\Defaultability\Domain\TaobaoTbkOptimusTouMaterialIdsGetMaterialQuery;
+use Topsdk\Topapi\Defaultability\Request\TaobaoTbkDgMaterialOptionalUpgradeRequest;
+use Topsdk\Topapi\Defaultability\Request\TaobaoTbkOptimusTouMaterialIdsGetRequest;
 use Topsdk\Topapi\TopApiClient;
+use Topsdk\Topapi\Defaultability\Request\TaobaoTbkDgMaterialRecommendRequest;
 
 class Taobao
 {
@@ -106,18 +117,37 @@ class Taobao
     }
 
     /**
-     * 淘宝客商品详情查询(简版)
+     * 淘宝客商品详情查询(简版) -- --待下线了
      * https://open.taobao.com/api.htm?docId=24518&docType=2&scopeId=16189
-     *
-     * @return void
+     * @return $this
      */
     public function detailInfo()
     {
+        // create Client
+        $client = $this->TopApiClient;
+        $ability = new Ability371($client);
+        $this->setAbility($ability,'taobaoTbkItemInfoGet');
+        // create domain
 
+        // create request
+        $request = new TaobaoTbkItemInfoGetRequest();
+        $this->setRequest($request);
+        return $this;
+
+        $request->setNumIids("123,456");
+        $request->setPlatform(1);
+        $request->setIp("11.22.33.43");
+        $request->setBizSceneId("1");
+        $request->setPromotionType("2");
+        $request->setRelationId("1");
+        $request->setManageItemPubId(1);
+
+        $response = $ability->taobaoTbkItemInfoGet($request);
+        var_dump($response);
     }
 
     /**
-     * 阿里妈妈推广券详情查询 --待下线了
+     * 阿里妈妈推广券详情查询
      * https://open.taobao.com/api.htm?docId=31106&docType=2&scopeId=16189
      * @return void
      */
@@ -147,7 +177,7 @@ class Taobao
      * 淘宝客商品详情查询升级版（简易版）
      * https://open.taobao.com/api.htm?docId=64763&docType=2&scopeId=16189
      *
-     * @return void
+     * @return $this
      */
     public function detailInfoUpgrade()
     {
@@ -176,9 +206,9 @@ class Taobao
      * https://open.taobao.com/api.htm?docId=62201&docType=2&scopeId=27939
      *
      * @param $wuliaoId
-     * @return void
+     * @return $this
      */
-    public function search($key)
+    public function search()
     {
         // create Client
         $client = $this->TopApiClient;
@@ -188,10 +218,13 @@ class Taobao
 
         // create request
         $request = new TaobaoTbkDgMaterialRecommendRequest();
-        $request->setPageSize(20);
+        $this->setRequest($request);
+        return $this;
+        
+        $request->setPageSize(20); // 1- 100
         $request->setPageNo(1);
-        $request->setMaterialId(123);
-        $request->setAdzoneId(123);
+        $request->setMaterialId(80309); // must
+        $request->setAdzoneId(123);     // must
         $request->setRelationId(123456);
         $request->setDeviceType("IMEI");
         $request->setDeviceEncrypt("MD5");
@@ -208,21 +241,97 @@ class Taobao
      * 物料id列表查询
      * https://open.taobao.com/api.htm?docId=64333&docType=2&scopeId=27939
      *
-     * @return void
+     * @return $this
      */
-    public function wuliaoIDSearch()
+    public function wuliaoIDSearch($pageNo,$subJect,$MaterriaType,$pageSize=20)
     {
+        // create Client
+        $client = $this->TopApiClient;
+        $ability = new Defaultability($client);
+        $this->setAbility($ability,'taobaoTbkOptimusTouMaterialIdsGet');
 
+        // create domain
+        $taobaoTbkOptimusTouMaterialIdsGetMaterialQuery = new TaobaoTbkOptimusTouMaterialIdsGetMaterialQuery();
+        $taobaoTbkOptimusTouMaterialIdsGetMaterialQuery->setPageNo($pageNo);
+        $taobaoTbkOptimusTouMaterialIdsGetMaterialQuery->setSubject($subJect);
+        $taobaoTbkOptimusTouMaterialIdsGetMaterialQuery->setMaterialType($MaterriaType);
+        $taobaoTbkOptimusTouMaterialIdsGetMaterialQuery->setPageSize($pageSize);
+
+        // create request
+        $request = new TaobaoTbkOptimusTouMaterialIdsGetRequest();
+        $request->setMaterialQuery(taobaoTbkOptimusTouMaterialIdsGetMaterialQuery);
+        $this->setRequest($request);
+        return $this;
+
+        $response = $ability->taobaoTbkOptimusTouMaterialIdsGet($request);
     }
 
     /**
      * 物料搜索升级版 -- 适用于工具商
      * https://open.taobao.com/api.htm?docId=64759&docType=2&scopeId=27939
      *
-     * @return void
+     * @return $this
      */
     public function wuliaoSearchUpgrade()
     {
+        // create Client
+        $client = $this->TopApiClient;
+        $ability = new Defaultability($client);
+        $this->setAbility($ability,'taobaoTbkDgMaterialOptionalUpgrade');
+
+        // create domain
+        $taobaoTbkDgMaterialOptionalUpgradeUcrowdrankitems = new TaobaoTbkDgMaterialOptionalUpgradeUcrowdrankitems();
+        $taobaoTbkDgMaterialOptionalUpgradeUcrowdrankitems->setCommirate(1234);
+        $taobaoTbkDgMaterialOptionalUpgradeUcrowdrankitems->setPrice(10.12);
+        $taobaoTbkDgMaterialOptionalUpgradeUcrowdrankitems->setItemId("qeqscd1231-uqwenqe");
+
+        // create request
+        $request = new TaobaoTbkDgMaterialOptionalUpgradeRequest();
+        $this->setRequest($request);
+        return $this;
+
+        $request->setStartDsr(10);
+        $request->setPageSize(20);
+        $request->setPageNo(1);
+        $request->setEndTkRate(1234);
+        $request->setStartTkRate(1234);
+        $request->setEndPrice(10);
+        $request->setStartPrice(10);
+        $request->setIsOverseas(false);
+        $request->setIsTmall(false);
+        $request->setSort("tk_rate_des");
+        $request->setItemloc("杭州");
+        $request->setCat("16,18");
+        $request->setQ("女装");
+        $request->setMaterialId(80309);
+        $request->setHasCoupon(false);
+        $request->setIp("13.2.33.4");
+        $request->setAdzoneId(12345678);
+        $request->setNeedFreeShipment(true);
+        $request->setNeedPrepay(true);
+        $request->setIncludePayRate30(true);
+        $request->setIncludeGoodRate(true);
+        $request->setIncludeRfdRate(true);
+        $request->setNpxLevel(2);
+        $request->setDeviceEncrypt("MD5");
+        $request->setDeviceValue("xxx");
+        $request->setDeviceType("IMEI");
+        $request->setSpecialId("2323");
+        $request->setRelationId("3243");
+        $request->setGetTopnRate(0);
+        $request->setBizSceneId("1");
+        $request->setPromotionType("2");
+        $request->setMgcStartTime("1695281620000");
+        $request->setMgcEndTime("1695281620000");
+        $request->setMgcStatus("0");
+        $request->setUcrowdId(1);
+        /*
+            0
+        */
+        $request->setUcrowdRankItems(array());
+
+        $response = $ability->taobaoTbkDgMaterialOptionalUpgrade($request);
+        var_dump($response);
 
     }
 
@@ -233,7 +342,25 @@ class Taobao
      */
     public function activeConvertLink()
     {
+        // create Client
+        $client = $this->TopApiClient;
+        $ability = new Ability374($client);
+        $this->setAbility($ability,'taobaoTbkActivityInfoGet');
+        // create domain
 
+        // create request
+        $request = new TaobaoTbkActivityInfoGetRequest();
+        $this->setRequest($request);
+        return $this;
+
+        $request->setActivityMaterialId("123");
+        $request->setAdzoneId(123);
+        $request->setSubPid("mm_1_2_3");
+        $request->setRelationId(123);
+        $request->setUnionId("demo");
+
+        $response = $ability->taobaoTbkActivityInfoGet($request);
+        var_dump($response);
     }
 
     public function __call($name, $arguments)
