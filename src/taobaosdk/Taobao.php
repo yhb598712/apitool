@@ -5,10 +5,13 @@ namespace Yhb\taobaosdk;
 use Topsdk\Topapi\Ability370\Ability370;
 use Topsdk\Topapi\Ability370\Request\TaobaoTbkShopGetRequest;
 use Topsdk\Topapi\Ability371\Ability371;
+use Topsdk\Topapi\Ability371\Request\TaobaoTbkCouponGetRequest;
 use Topsdk\Topapi\Ability371\Request\TaobaoTbkItemInfoGetRequest;
 use Topsdk\Topapi\Ability371\Request\TaobaoTbkItemInfoUpgradeGetRequest;
 use Topsdk\Topapi\Ability374\Ability374;
 use Topsdk\Topapi\Ability374\Request\TaobaoTbkActivityInfoGetRequest;
+use Topsdk\Topapi\Ability425\Ability425;
+use Topsdk\Topapi\Ability425\Request\TaobaoTbkScPublisherInfoSaveRequest;
 use Topsdk\Topapi\Defaultability\Defaultability;
 use Topsdk\Topapi\Defaultability\Domain\TaobaoTbkDgMaterialOptionalUpgradeUcrowdrankitems;
 use Topsdk\Topapi\Defaultability\Domain\TaobaoTbkOptimusTouMaterialIdsGetMaterialQuery;
@@ -26,6 +29,10 @@ class Taobao
     private $request;
     private $ability;
     private $abilityMethod;
+    /**
+     * @var mixed|null
+     */
+    private $session;
 
     /**
      * @return mixed
@@ -38,10 +45,11 @@ class Taobao
     /**
      * @param mixed $ability
      */
-    public function setAbility($ability,$abilityMethod)
+    public function setAbility($ability,$abilityMethod,$session=null)
     {
         $this->ability = $ability;
         $this->abilityMethod = $abilityMethod;
+        $this->session = $session;
     }
 
     /**
@@ -113,7 +121,12 @@ class Taobao
     public function getResult()
     {
         $method = $this->abilityMethod;
-        return $this->ability->$method($this->getRequest());
+        if(!is_null($this->session)){
+            return $this->ability->$method($this->getRequest(),$this->session);
+        }else{
+            return $this->ability->$method($this->getRequest());
+        }
+
     }
 
     /**
@@ -361,6 +374,36 @@ class Taobao
 
         $response = $ability->taobaoTbkActivityInfoGet($request);
         var_dump($response);
+    }
+
+    /**
+     * 渠道备案 会员备案 根据授权返回的token 来传来
+     * @return $this
+     */
+    public function qudaoshouquan($session)
+    {
+        // create Client
+        $client = $this->TopApiClient;
+        $ability = new Ability425($client);
+        $this->setAbility($ability,'taobaoTbkScPublisherInfoSave',$session);
+
+        // create domain
+
+        // create request
+        $request = new TaobaoTbkScPublisherInfoSaveRequest();
+        $this->setRequest($request);
+        return $this;
+
+        // $request->setRelationFrom("1"); //渠道备案 - 来源，取链接的来源
+        // $request->setOfflineScene("1"); //渠道备案 - 线下场景信息，1 - 门店，2- 学校，3 - 工厂，4 - 其他
+        // $request->setOnlineScene("1");  //渠道备案 - 线上场景信息，1 - 微信群，2- QQ群，3 - 其他
+        // $request->setInviterCode("xxx"); // MUST 淘宝客邀请渠道或会员的邀请码
+        // $request->setInfoType(1); // MUST 类型，必选 默认为1:
+        // $request->setNote("小蜜蜂");
+        // $request->setRegisterInfo("{"phoneNumber":"18801088599","city":"江苏省","province":"南京市","location":"玄武区花园小区","detailAddress":"5号楼3单元101室","shopType":"社区店","shopName":"全家便利店","shopCertifyType":"营业执照","certifyNumber":"111100299001"}");
+        // //{"phoneNumber":"18801088599","city":"江苏省","province":"南京市","location":"玄武区花园小区","detailAddress":"5号楼3单元101室","shopType":"社区店","shopName":"全家便利店","shopCertifyType":"营业执照","certifyNumber":"111100299001"}
+        // $response = $ability->taobaoTbkScPublisherInfoSave($request,"<user session>");
+        // var_dump($response);
     }
 
     public function __call($name, $arguments)
