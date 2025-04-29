@@ -1,12 +1,12 @@
 {
     "name": "yhb/apitool",
-    "description": "yhb test composer",
+    "description": "opentaobao taobao api",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "yhb",
-            "email": "yhb598712@163.com"
+            "email": ""
         }
     ],
     "autoload": {
