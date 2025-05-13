@@ -1,6 +1,6 @@
 {
     "name": "yhb/apitool",
-    "description": "opentaobao taobao api",
+    "description": "TopSdk api opentaobao taobao api",
     "type": "library",
     "license": "MIT",
     "authors": [
